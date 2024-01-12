@@ -1,0 +1,26 @@
+version: "3"
+services:
+  sdnext:
+    environment:
+      - HSA_OVERRIDE_GFX_VERSION=10.3.0
+      - TRANSFORMERS_CACHE=./.cache
+    tty: true
+    container_name: sd.next
+    build: 
+      context: .
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/sdnext:rw
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+    ports:
+      - 7860:7860
+    ipc: host
+    security_opt:
+      - seccomp:unconfined
+    network_mode: "host" 
+    entrypoint: ./webui-docker.sh
